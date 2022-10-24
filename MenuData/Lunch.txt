@@ -1,0 +1,5 @@
+Com ga, Lunch from Vietnam, 25000.0, LUNCH
+Com suon, Lunch from Vietnam, 23000.0, LUNCH
+Pizza, Lunch from the USA, 35000.0, LUNCH
+Com tap cam, Lunch from Vietnam, 25000.0, LUNCH
+Mi y, Lunch from Italia, 30000.0, LUNCH

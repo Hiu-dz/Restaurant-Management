@@ -1,0 +1,3 @@
+Pepsi, Drink from the USA, 12000.0, SOFT_DRINK
+Sting, Drink from Vietnam, 15000.0, SOFT_DRINK
+Red Bull, Sort drink from another country, 18000.0, SOFT_DRINK
