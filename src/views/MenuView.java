@@ -64,6 +64,7 @@ public class MenuView {
         System.out.println("2. Food menu");
         System.out.println("------");
         System.out.println("0. Exit program");
+        System.out.println("b. Back system");
         System.out.println("------");
 
         this.chooseMenu();
@@ -73,20 +74,23 @@ public class MenuView {
      * Choose menu number of main menu
      */
     private void chooseMenu() {
+        MainView mainView = new MainView();
         Scanner scChooseNumber = new Scanner(System.in);
 
         System.out.print("Enter the choose number: ");
-        String chooseNumber = scChooseNumber.nextLine();
-        if (this.menuController.isValidChooseMenu(chooseNumber)) {
-            int menuNumber = Integer.parseInt(chooseNumber);
-            int drinkMenu = 1;
-            int foodMenu = 2;
-            if (menuNumber == drinkMenu) {
-                this.showDrinkMenu();
-            } else if (menuNumber == foodMenu) {
-                this.showFoodMenu();
-            }
-        } else {
+        String choose = scChooseNumber.nextLine();
+        int number = this.menuController.validateChooseMenu(choose);
+        int drinkMenu = 1;
+        int foodMenu = 2;
+        int backSystem = 3;
+        int warning = -1;
+        if (number == drinkMenu) {
+            this.showDrinkMenu();
+        } else if (number == foodMenu) {
+            this.showFoodMenu();
+        } else if (number == backSystem) {
+            mainView.showSystem();
+        } else if (number == warning) {
             this.chooseMenu();
         }
     }
@@ -201,6 +205,7 @@ public class MenuView {
         System.out.println("4. Remove item");
         System.out.println("------");
         System.out.println("0. Exit program");
+        System.out.println("b. Back system management");
         System.out.println("------");
 
         this.chooseFunction();
@@ -210,14 +215,20 @@ public class MenuView {
      * Choose function in menu management
      */
     private void chooseFunction() {
+        MainView mainView = new MainView();
         Scanner scChoose = new Scanner(System.in);
 
         System.out.print("Enter the choose number: ");
-        String chooseNumber = scChoose.nextLine();
-
-        if (this.menuController.isValidChooseFunction(chooseNumber)) {
-            this.executeFunction(Integer.parseInt(chooseNumber));
-        } else {
+        String choose = scChoose.nextLine();
+        int number = this.menuController.validateChooseFunction(choose);
+        int functions = 1;
+        int backSystemManagement = 2;
+        int warning = -1;
+        if (number == functions) {
+            this.executeFunction(Integer.parseInt(choose));
+        } else if (number == backSystemManagement) {
+            mainView.showSystemManagement();
+        } else if (number == warning) {
             this.chooseFunction();
         }
     }

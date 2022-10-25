@@ -23,25 +23,29 @@ public class BillController {
     /**
      * Validate choose number of choose date bill
      *
-     * @param chooseNumber: choose number
+     * @param choose: string choose
      * @return true if valid choose date bill
      */
-    public boolean isValidChooseDateBill(String chooseNumber) {
+    public int validateChooseDateBill(String choose) {
         try {
-            int number = Integer.parseInt(chooseNumber);
+            int number = Integer.parseInt(choose);
             if (number >= 0) {
                 if (number == 0) {
                     System.out.println("--> ALERT: Program will exit. See you again");
                     System.exit(0);
+                    return 0;
                 }
-                return true;
+                return 1;
             } else {
                 System.out.println("--> WARNING: Can only enter positive integer. Please try again");
-                return false;
+                return -1;
             }
         } catch (NumberFormatException e) {
+            if (choose.equals("b")) {
+                return 2;
+            }
             System.out.println("--> WARNING: Can only enter positive integer. Please try again");
-            return false;
+            return -1;
         }
     }
 

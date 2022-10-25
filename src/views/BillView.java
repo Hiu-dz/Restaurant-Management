@@ -40,6 +40,7 @@ public class BillView {
         }
         System.out.println("------");
         System.out.println("0. Exit program");
+        System.out.println("b. Back system management");
         System.out.println("------");
         this.chooseDateBill();
     }
@@ -48,14 +49,20 @@ public class BillView {
      * Choose date bill in show bill management
      */
     private void chooseDateBill() {
+        MainView mainView = new MainView();
         Scanner scChoose = new Scanner(System.in);
 
         System.out.print("Enter the choose number: ");
-        String chooseNumber = scChoose.nextLine();
-        if (this.billController.isValidChooseDateBill(chooseNumber)) {
-            int number = Integer.parseInt(chooseNumber);
+        String choose = scChoose.nextLine();
+        int number = this.billController.validateChooseDateBill(choose);
+        int bills = 1;
+        int back = 2;
+        int warning = -1;
+        if (number == bills) {
             this.showAllBillByDateBill(number);
-        } else {
+        } else if (number == back) {
+            mainView.showSystemManagement();
+        } else if (number == warning) {
             this.chooseDateBill();
         }
     }

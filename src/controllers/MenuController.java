@@ -48,28 +48,34 @@ public class MenuController {
     /**
      * Validate input choose number of main menu
      *
-     * @param chooseNumber: choose number of menu
+     * @param choose: string choose
      * @return true if valid choose number
      */
-    public boolean isValidChooseMenu(String chooseNumber) {
-        if (isPositiveInteger(chooseNumber)) {
-            int menuNumber = Integer.parseInt(chooseNumber);
+    public int validateChooseMenu(String choose) {
+        if (isPositiveInteger(choose)) {
+            int menuNumber = Integer.parseInt(choose);
             int drinkMenu = 1;
             int foodMenu = 2;
             int exitProgram = 0;
-            if (menuNumber == drinkMenu || menuNumber == foodMenu) {
-                return true;
+            if (menuNumber == drinkMenu) {
+                return 1;
+            } else if (menuNumber == foodMenu) {
+                return 2;
             } else if (menuNumber == exitProgram) {
                 System.out.println("--> ALERT: Program will exit. See you again");
                 System.exit(0);
-                return false;
+                return 0;
             } else {
-                System.out.println("--> WARNING: Can only enter 0 to 2. Please try again");
-                return false;
+                System.out.println("--> WARNING: Can only enter '0' to '2' or 'b'. Please try again");
+                return -1;
             }
         } else {
-            System.out.println("--> WARNING: Can only enter integer. Please try again");
-            return false;
+            String back = "b";
+            if (choose.equals(back)) {
+                return 3;
+            }
+            System.out.println("--> WARNING: Can only enter '0' to '2' or 'b'. Please try again");
+            return -1;
         }
     }
 
@@ -126,25 +132,28 @@ public class MenuController {
     /**
      * Validate input choose function in menu management
      *
-     * @param chooseNumber: choose number of function
+     * @param choose: string choose
      * @return true if valid choose number
      */
-    public boolean isValidChooseFunction(String chooseNumber) {
-        if (isPositiveInteger(chooseNumber)) {
-            int funcNumber = Integer.parseInt(chooseNumber);
+    public int validateChooseFunction(String choose) {
+        if (isPositiveInteger(choose)) {
+            int funcNumber = Integer.parseInt(choose);
             if (funcNumber > 0 && funcNumber <= 4) {
-                return true;
+                return 1;
             } else if (funcNumber == 0) {
                 System.out.println("--> ALERT: Program will exit. See you again");
                 System.exit(0);
-                return true;
+                return 0;
             } else {
-                System.out.println("--> WARNING: Can only enter 0 to 4. Please try again");
-                return false;
+                System.out.println("--> WARNING: Can only enter '0' to '4' or 'b'. Please try again");
+                return -1;
             }
         } else {
-            System.out.println("--> WARNING: Can only enter the integer. Please try again");
-            return false;
+            if (choose.equals("b")) {
+                return 2;
+            }
+            System.out.println("--> WARNING: Can only enter '0' to '4' or 'b'. Please try again");
+            return -1;
         }
     }
 
