@@ -1,25 +1,69 @@
 package repositories;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import models.BillModel;
 import models.MenuModel;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
 public class BillRepository {
-    private static List<BillModel> billList;
+    private final List<BillModel> billList;
+    private final Map<MenuModel, Integer> menuItemsList;
 
     public BillRepository() {
-        billList = new ArrayList<>();
+        this.billList = new ArrayList<>();
+        this.menuItemsList = new HashMap<>();
+    }
+
+    public Map<MenuModel, Integer> getMenuItemsList() {
+        return menuItemsList;
+    }
+
+    /**
+     * Create bill list from file og bill
+     *
+     * @param billFile : bill file
+     * @return bill list
+     */
+    private static List<BillModel> getBillListFromFile(String billFile) {
+        Gson gson = new Gson();
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader("BillData/" + billFile));
+            Type type = new TypeToken<List<BillModel>>() {
+            }.getType();
+            return new ArrayList<>(gson.fromJson(br, type));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Rewrite bill file
+     *
+     * @param list:     bill list
+     * @param billFile: path of bill file
+     */
+    private void rewriteFile(List<BillModel> list, String billFile) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            File file = new File("BillData/" + billFile);
+            Writer writer = Files.newBufferedWriter(file.toPath());
+            gson.toJson(list, writer);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -27,14 +71,15 @@ public class BillRepository {
      *
      * @return list of date bill
      */
-    public List<String> getAllDateBill() {
+    public List<String> getAllMonthBill() {
         File directoryPath = new File("BillData/");
         String[] contents = directoryPath.list();
         List<String> directories = new ArrayList<>();
         if (contents != null) {
             for (String content : contents) {
                 File tempDirectory = new File("BillData/" + content);
-                if (tempDirectory.isDirectory()) {
+                if (tempDirectory.isFile()) {
+                    content = content.replace(".json", "");
                     directories.add(content);
                 }
             }
@@ -43,152 +88,77 @@ public class BillRepository {
     }
 
     /**
-     * Get all bill in directory date bill
+     * Get all bill in month bill
      *
-     * @param dateBill: date of bill
+     * @param billFile: bill file
      * @return list of date bill
      */
-    public List<String> getAllBill(String dateBill) {
-        File billPath = new File("BillData/" + dateBill);
-        String[] contents = billPath.list();
-        List<String> bills = new ArrayList<>();
-        if (contents != null) {
-            for (String content : contents) {
-                File tempBill = new File("BillData/" + dateBill + "/" + content);
-                if (tempBill.isFile()) {
-                    bills.add(content);
-                }
-            }
-        }
-        return bills;
+    public List<BillModel> getAllBill(String billFile) {
+        return getBillListFromFile(billFile);
     }
 
     /**
-     * Get a bill in directory date bill
+     * Get a bill in month bill
      *
-     * @param dateBill: date of bill
-     * @param bill:     bill file
+     * @param monthBill: month of bill
+     * @param index:     bill file
      * @return a bill
      */
-    public List<String> getOneBill(String dateBill, String bill) {
-        Path billPath = Paths.get("BillData/" + dateBill + "/" + bill);
-        List<String> aBill = new ArrayList<>();
-        try (BufferedReader br = Files.newBufferedReader(billPath)) {
-            aBill = br.lines().toList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return aBill;
-    }
-
-    /**
-     * Remove a bill in directory date bill
-     *
-     * @param dateBill: date of bill
-     * @param bill:     bill file
-     */
-    public void removeBill(String dateBill, String bill) {
-        Path billPath = Paths.get("BillData/" + dateBill + "/" + bill);
-        try {
-            Files.delete(billPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public BillModel getOneBill(String monthBill, int index) {
+        List<BillModel> bills = getBillListFromFile(monthBill);
+        return bills.get(index);
     }
 
     /**
      * Add menu item at bill list
      *
-     * @param menuModel:   obj of menu model
-     * @param quantity:    quantity of menu item
-     * @param orderedTime: ordered time
+     * @param menuModel: obj of menu model
+     * @param quantity:  quantity of menu item
      */
-    public void addMenuItem(MenuModel menuModel, int quantity, LocalDate orderedTime) {
-        Map<MenuModel, Integer> menuItems = new HashMap<>();
-        menuItems.put(menuModel, quantity);
-        billList.add(new BillModel(menuItems, orderedTime));
+    public void addMenuItem(MenuModel menuModel, int quantity) {
+        menuItemsList.put(menuModel, quantity);
     }
 
     /**
-     * Create bill name for bill file at directory date bill
+     * Add new bill to month bill
      *
-     * @param dateBill: date of bill
-     * @return bill name
+     * @param map: menu items
      */
-    private String createBillName(String dateBill) {
-        Path dateBillPath = Paths.get("BillData/" + dateBill);
-        File dateBillDirectory = new File(dateBillPath.toUri());
-        if (!dateBillDirectory.exists()) {
-            try {
-                Files.createDirectory(dateBillPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void createBill(Map<MenuModel, Integer> map) {
+        LocalDate orderedTime = LocalDate.now();
+        String billFile = orderedTime.format(DateTimeFormatter.ofPattern("MM-yyyy")) + ".json";
+        billList.add(new BillModel(map, orderedTime));
 
-        int billNumber = 1;
-        String billName = "Bill" + billNumber + ".txt";
-        List<String> bills = this.getAllBill(dateBill);
-        for (String b : bills) {
-            if (b.equals(billName)) {
-                billNumber++;
-                billName = "Bill" + billNumber + ".txt";
-            }
+        if (Files.exists(Path.of("BillData/" + billFile))) {
+            List<BillModel> bills = getBillListFromFile(billFile);
+            bills.addAll(billList);
+            this.rewriteFile(bills, billFile);
+        } else {
+            this.rewriteFile(billList, billFile);
         }
-        return billName;
     }
 
     /**
-     * Format date follow dd-MM-yyyy
+     * Get bill when order done
      *
-     * @param date: date
-     * @return date has been formatted
+     * @return bill
      */
-    private String formatDate(LocalDate date) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return date.format(dateTimeFormatter);
+    public BillModel getBillWhenOrderDone() {
+        List<BillModel> bill = billList;
+        int newBill = bill.size() - 1;
+        return bill.get(newBill);
     }
 
     /**
-     * Create bill file at directory date bill
+     * Remove a bill in month bill
      *
-     * @param dateBill: date of bill
+     * @param billFile: bill file
+     * @param index:    index of bill
      */
-    public void createBill(String dateBill) {
-        String billName = this.createBillName(dateBill);
-        Path billPath = Paths.get("BillData/" + dateBill + "/" + billName);
-
-        try (BufferedWriter bw = Files.newBufferedWriter(billPath)) {
-            String billTitle = billName.replace(".txt", "");
-            bw.write("+--------------------------- " + billTitle + " -------------------------+\n");
-            bw.write("+---+------------+----------+---------------+---------------+\n");
-            bw.write("| # | Item       | Quantity | Ordered Time  | Price Items   |\n");
-            bw.write("+---+------------+----------+---------------+---------------+\n");
-            int i = 1;
-            double totalBill = 0;
-            for (BillModel b : billList) {
-                Map<MenuModel, Integer> menuItem = b.getMenuItem();
-                String itemName = null;
-                int itemQuantity = 0;
-                double itemPrice = 0;
-                for (Map.Entry<MenuModel, Integer> m : menuItem.entrySet()) {
-                    itemName = m.getKey().getName();
-                    itemQuantity = m.getValue();
-                    itemPrice = m.getKey().getPrice();
-                }
-                String orderedTime = this.formatDate(b.getOrderedTime());
-                double itemsPrice = itemQuantity * itemPrice;
-                totalBill += itemsPrice;
-                String s = String.format("| %s | %-11s| %-9s| %-14s| %-14s| %n", i++, itemName, itemQuantity, orderedTime, itemsPrice);
-                bw.write(s);
-            }
-            bw.write("+--------------+------------+---------------+---------------+\n");
-            String ss = String.format("| %s: %-45s| %n", "Total bill ", totalBill + " vnd");
-            bw.write(ss);
-            bw.write("+-----------------------------------------------------------+\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void removeBill(String billFile, int index) {
+        List<BillModel> bills = getBillListFromFile(billFile);
+        bills.remove(index);
+        this.rewriteFile(bills, billFile);
     }
 
 }

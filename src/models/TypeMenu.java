@@ -1,11 +1,11 @@
 package models;
 
 public enum TypeMenu {
-    SOFT_DRINK("Soft drink", "SoftDrink.txt"),
-    ALCOHOL("Alcohol", "Alcohol.txt"),
-    BREAKFAST("Breakfast", "Breakfast.txt"),
-    LUNCH("Lunch", "Lunch.txt"),
-    DINNER("Dinner", "Dinner.txt");
+    SOFT_DRINK("Soft drink", "SoftDrink.json"),
+    ALCOHOL("Alcohol", "Alcohol.json"),
+    BREAKFAST("Breakfast", "Breakfast.json"),
+    LUNCH("Lunch", "Lunch.json"),
+    DINNER("Dinner", "Dinner.json");
 
     private final String name;
     private final String file;

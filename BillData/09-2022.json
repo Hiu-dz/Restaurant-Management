@@ -1,0 +1,35 @@
+[
+  {
+    "menuItems": [
+      {
+        "name": "name2",
+        "description": "des2",
+        "price": "2.0",
+        "type": "SOFT_DRINK",
+        "quantity": "3"
+      },
+      {
+        "name": "name3",
+        "description": "des3",
+        "price": "3.0",
+        "type": "BREAKFAST",
+        "quantity": "4"
+      },
+      {
+        "name": "name1",
+        "description": "des1",
+        "price": "1.0",
+        "type": "ALCOHOL",
+        "quantity": "2"
+      },
+      {
+        "name": "name4",
+        "description": "des4",
+        "price": "4.0",
+        "type": "DINNER",
+        "quantity": "5"
+      }
+    ],
+    "orderedTime": "28-10-2022"
+  }
+]

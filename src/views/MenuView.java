@@ -2,6 +2,7 @@ package views;
 
 import controllers.MenuController;
 import models.MenuModel;
+import models.TypeMenu;
 
 import java.util.*;
 
@@ -99,8 +100,8 @@ public class MenuView {
      * Show drink menu
      */
     private void showDrinkMenu() {
-        List<MenuModel> softDrinks = this.menuController.showMenuList("SoftDrink.txt");
-        List<MenuModel> alcohols = this.menuController.showMenuList("Alcohol.txt");
+        List<MenuModel> softDrinks = this.menuController.showMenuList(TypeMenu.SOFT_DRINK.getFile());
+        List<MenuModel> alcohols = this.menuController.showMenuList(TypeMenu.ALCOHOL.getFile());
         int totalItem = softDrinks.size() + alcohols.size();
 
         System.out.println("---- DRINK MENU ----");
@@ -129,9 +130,9 @@ public class MenuView {
      * Show food menu
      */
     private void showFoodMenu() {
-        List<MenuModel> breakfasts = this.menuController.showMenuList("Breakfast.txt");
-        List<MenuModel> lunches = this.menuController.showMenuList("Lunch.txt");
-        List<MenuModel> dinners = this.menuController.showMenuList("Dinner.txt");
+        List<MenuModel> breakfasts = this.menuController.showMenuList(TypeMenu.BREAKFAST.getFile());
+        List<MenuModel> lunches = this.menuController.showMenuList(TypeMenu.LUNCH.getFile());
+        List<MenuModel> dinners = this.menuController.showMenuList(TypeMenu.DINNER.getFile());
         int totalItem = breakfasts.size() + lunches.size() + dinners.size();
 
         System.out.println("---- FOOD MENU ----");
@@ -183,7 +184,7 @@ public class MenuView {
                 int itemQuantity = scEnterQuantity.nextInt();
                 this.menuController.orderMenuItem(typeMenu, Integer.parseInt(itemNumber), itemQuantity);
                 System.out.println("------");
-                this.exitMenu();
+                this.chooseOptionWhenOrdered();
             } else if (chooseOption == warning) {
                 this.chooseItem(typeMenu, totalItem);
             } else if (chooseOption == backMainMenu) {
@@ -191,6 +192,55 @@ public class MenuView {
             }
         } catch (InputMismatchException e) {
             this.chooseItem(typeMenu, totalItem);
+        }
+    }
+
+    /**
+     * Choose options when ordered
+     */
+    private void chooseOptionWhenOrdered() {
+        Scanner scChoose = new Scanner(System.in);
+
+        System.out.println("--> QUESTION: Do you want to continue ordering ?");
+        System.out.println("1. Yes (Back order menu item)");
+        System.out.println("2. No (Back system)");
+        System.out.println("0. Exit program");
+        System.out.println("------");
+        System.out.print("Enter your choose number: ");
+        String choose = scChoose.nextLine();
+
+        int number = this.menuController.validateChooseOptionWhenOrdered(choose);
+        int continueOrder = 1;
+        int finishOrder = 2;
+        int warning = -1;
+        if (number == continueOrder) {
+            this.showMenu();
+        } else if (number == finishOrder) {
+            this.chooseOptionWhenPrintBill();
+        } else if (number == warning) {
+            this.chooseOptionWhenOrdered();
+        }
+    }
+
+    /**
+     * Choose options when print bill
+     */
+    public void chooseOptionWhenPrintBill() {
+        MainView mainView = new MainView();
+        Scanner scChoose = new Scanner(System.in);
+
+        System.out.println("1. Back system");
+        System.out.println("0. Exit program");
+        System.out.println("------");
+        System.out.print("Enter your choose number: ");
+        String choose = scChoose.nextLine();
+        int number = this.menuController.validateChooseWhenPrintBill(choose);
+        int backSystem = 1;
+        int warning = -1;
+        if (number == backSystem) {
+            mainView.showSystem();
+        } else if (number == warning) {
+            this.chooseOptionWhenPrintBill();
         }
     }
 
@@ -342,12 +392,16 @@ public class MenuView {
 
         String typeMenuName = this.menuController.getTypeMenuName(typeMenuNumber);
         System.out.println("------ " + typeMenuName + " - MENU LIST ------");
-        for (int i = 0; i < menuList.size(); i++) {
-            int itemNumber = i + 1;
-            String name = menuList.get(i).getName();
-            String description = menuList.get(i).getDescription();
-            double price = menuList.get(i).getPrice();
-            System.out.println(itemNumber + ". " + name + " - " + description + " - " + price + " vnd");
+        if (!menuList.isEmpty()) {
+            for (int i = 0; i < menuList.size(); i++) {
+                int itemNumber = i + 1;
+                String name = menuList.get(i).getName();
+                String description = menuList.get(i).getDescription();
+                double price = menuList.get(i).getPrice();
+                System.out.println(itemNumber + ". " + name + " - " + description + " - " + price + " vnd");
+            }
+        } else {
+            System.out.println("This list has no items. Please come back later");
         }
         System.out.println("------");
     }

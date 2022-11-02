@@ -1,8 +1,11 @@
 package models;
 
+import com.google.gson.annotations.JsonAdapter;
+
 import java.time.LocalDate;
 import java.util.Map;
 
+@JsonAdapter(BillModelAdapter.class)
 public class BillModel {
     private Map<MenuModel, Integer> menuItems;
     private LocalDate orderedTime;

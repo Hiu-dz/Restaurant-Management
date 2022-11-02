@@ -1,5 +1,0 @@
-Lau ga, Dinner from Vietnam, 65000, DINNER
-Lau hai san, Dinner from Vietnam, 85000, DINNER
-Hu tieu, Dinner from Vietnam, 20000, DINNER
-Com tam, Dinner from Vietnam, 25000, DINNER
-Mi y, Dinner from Italia, 30000, DINNER

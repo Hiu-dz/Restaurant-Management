@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Com ga",
+    "description": "Lunch from Vietnam",
+    "price": 25000.0,
+    "type": "LUNCH"
+  },
+  {
+    "name": "Com suon",
+    "description": "Lunch from Vietnam",
+    "price": 23000.0,
+    "type": "LUNCH"
+  },
+  {
+    "name": "Pizza",
+    "description": "Lunch from Vietnam",
+    "price": 35000.0,
+    "type": "LUNCH"
+  },
+  {
+    "name": "Com tap cam",
+    "description": "Lunch from the USA",
+    "price": 25000.0,
+    "type": "LUNCH"
+  },
+  {
+    "name": "Mi y",
+    "description": "Lunch from Italia",
+    "price": 30000.0,
+    "type": "LUNCH"
+  }
+]

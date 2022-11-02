@@ -1,13 +1,19 @@
 package repositories;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import models.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class MenuRepository {
 
@@ -17,26 +23,20 @@ public class MenuRepository {
      * @param fileName: file name
      * @return list of menu file
      */
-    private static List<MenuModel> getListFromFile(String fileName) {
-        List<String> intermediateList = new ArrayList<>();
-        List<MenuModel> menuItems = new ArrayList<>();
-        File file = new File("MenuData/" + fileName);
-        try (Scanner scFile = new Scanner(file)) {
-            int i = 0;
-            while (scFile.hasNext()) {
-                intermediateList.add(scFile.nextLine());
-                String[] information = intermediateList.get(i++).split(", ");
-                String name = information[0];
-                String description = information[1];
-                double price = Double.parseDouble(information[2]);
-                TypeMenu type = TypeMenu.valueOf(information[3]);
+    public static List<MenuModel> getListFromFile(String fileName) {
+        Gson gson = new Gson();
 
-                menuItems.add(new MenuModel(name, description, price, type));
+        try {
+            Path path = Paths.get("MenuData/" + fileName);
+            Reader reader = Files.newBufferedReader(path);
+            List<MenuModel> menuItems = gson.fromJson(reader, new TypeToken<List<MenuModel>>() {}.getType());
+            if (menuItems != null) {
+                return menuItems;
             }
-            return menuItems;
-        } catch (FileNotFoundException e) {
+            return new ArrayList<>();
+        } catch (IOException e) {
             System.out.println(e.getMessage());
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
     }
 
@@ -47,12 +47,13 @@ public class MenuRepository {
      * @param listName: object of menu
      */
     private void rewriteFile(File pathFile, List<MenuModel> listName) {
-        try (BufferedWriter bw = Files.newBufferedWriter(pathFile.toPath())) {
-            for (MenuModel m : listName) {
-                bw.write(m.getName() + ", " + m.getDescription() + ", " + m.getPrice() + ", " + m.getType() + "\n");
-            }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            Writer writer = Files.newBufferedWriter(pathFile.toPath());
+            gson.toJson(listName, writer);
+            writer.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -71,21 +72,21 @@ public class MenuRepository {
      *
      * @return list of all menu
      */
-    public List<MenuModel> getAllMenus() {
-        List<MenuModel> menus = new ArrayList<>();
-        List<MenuModel> softDrinks = this.getMenuList("SoftDrink.txt");
-        List<MenuModel> alcohols = this.getMenuList("Alcohol.txt");
-        List<MenuModel> breakfasts = this.getMenuList("Breakfast.txt");
-        List<MenuModel> lunches = this.getMenuList("Lunch.txt");
-        List<MenuModel> dinners = this.getMenuList("Dinner.txt");
+    public List<MenuModel> getAllMenuItems() {
+        List<MenuModel> menuItems = new ArrayList<>();
+        List<MenuModel> softDrinks = this.getMenuList(TypeMenu.SOFT_DRINK.getFile());
+        List<MenuModel> alcohols = this.getMenuList(TypeMenu.ALCOHOL.getFile());
+        List<MenuModel> breakfasts = this.getMenuList(TypeMenu.BREAKFAST.getFile());
+        List<MenuModel> lunches = this.getMenuList(TypeMenu.LUNCH.getFile());
+        List<MenuModel> dinners = this.getMenuList(TypeMenu.DINNER.getFile());
 
-        menus.addAll(softDrinks);
-        menus.addAll(alcohols);
-        menus.addAll(breakfasts);
-        menus.addAll(lunches);
-        menus.addAll(dinners);
+        menuItems.addAll(softDrinks);
+        menuItems.addAll(alcohols);
+        menuItems.addAll(breakfasts);
+        menuItems.addAll(lunches);
+        menuItems.addAll(dinners);
 
-        return menus;
+        return menuItems;
     }
 
     /**
@@ -96,9 +97,11 @@ public class MenuRepository {
      * @return true if item name exist in menu
      */
     public boolean hasItemName(String fileName, String itemName) {
-        for (MenuModel m : getListFromFile(fileName)) {
-            if (itemName.equals(m.getName())) {
-                return true;
+        if (!getListFromFile(fileName).isEmpty()) {
+            for (MenuModel m : getListFromFile(fileName)) {
+                if (itemName.equals(m.getName())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -112,17 +115,10 @@ public class MenuRepository {
      */
     public void addItem(String fileName, MenuModel menuItem) {
         File file = new File("MenuData/" + fileName);
-        try (FileWriter fileWriter = new FileWriter(file, true);
-             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-             PrintWriter printWriter = new PrintWriter(bufferedWriter)) {
-            String name = menuItem.getName();
-            String description = menuItem.getDescription();
-            String price = String.valueOf(menuItem.getPrice());
-            String type = String.valueOf(menuItem.getType());
-            printWriter.println(name + ", " + description + ", " + price + ", " + type);
-        } catch (IOException io) {
-            System.out.println(io.getMessage());
-        }
+        List<MenuModel> menuItems = getListFromFile(fileName);
+        menuItems.add(menuItem);
+
+        this.rewriteFile(file, menuItems);
     }
 
     /**

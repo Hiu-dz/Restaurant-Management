@@ -1,6 +1,12 @@
 package controllers;
 
 public class MainController {
+    /**
+     * Validate choose system
+     *
+     * @param chooseNumber: choose number
+     * @return 1 if is order menu item, 2 if is system management and 0 if is exit program
+     */
     public int validateChooseSystem(String chooseNumber) {
         try {
             int number = Integer.parseInt(chooseNumber);
@@ -30,6 +36,12 @@ public class MainController {
         }
     }
 
+    /**
+     * Validate choose system management
+     *
+     * @param choose: string choose
+     * @return 1 if is menu management, 2 if is bill management, 0 if is exit program
+     */
     public int validateChooseSystemManagement(String choose) {
         try {
             int number = Integer.parseInt(choose);

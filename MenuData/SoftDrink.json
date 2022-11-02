@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Pepsi",
+    "description": "Drink from the USA",
+    "price": 12000.0,
+    "type": "SOFT_DRINK"
+  },
+  {
+    "name": "Sting",
+    "description": "Drink from Vietnam",
+    "price": 15000.0,
+    "type": "SOFT_DRINK"
+  },
+  {
+    "name": "Red Bull",
+    "description": "Sort drink from another country",
+    "price": 18000.0,
+    "type": "SOFT_DRINK"
+  },
+  {
+    "name": "0 do",
+    "description": "This is description",
+    "price": 19000.0,
+    "type": "SOFT_DRINK"
+  },
+  {
+    "name": "Coca",
+    "description": "Soft drink from the USA",
+    "price": 13000.0,
+    "type": "SOFT_DRINK"
+  }
+]

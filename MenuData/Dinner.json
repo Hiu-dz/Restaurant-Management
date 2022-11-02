@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Lau ga",
+    "description": "Dinner from Vietnam",
+    "price": 65000.0,
+    "type": "DINNER"
+  },
+  {
+    "name": "Lau hai san",
+    "description": "Dinner from Vietnam",
+    "price": 25000.0,
+    "type": "DINNER"
+  },
+  {
+    "name": "Hu tieu",
+    "description": "Dinner from Vietnam",
+    "price": 35000.0,
+    "type": "DINNER"
+  },
+  {
+    "name": "Com tam",
+    "description": "Dinner from Vietnam",
+    "price": 25000.0,
+    "type": "DINNER"
+  },
+  {
+    "name": "Mi y",
+    "description": "Dinner from Italy",
+    "price": 30000.0,
+    "type": "DINNER"
+  }
+]

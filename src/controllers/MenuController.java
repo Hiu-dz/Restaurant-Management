@@ -63,6 +63,8 @@ public class MenuController {
                 return 2;
             } else if (menuNumber == exitProgram) {
                 System.out.println("--> ALERT: Program will exit. See you again");
+                // Print bill
+                this.menuService.exportBill();
                 System.exit(0);
                 return 0;
             } else {
@@ -110,7 +112,66 @@ public class MenuController {
     }
 
     /**
+     * Validate string choose when ordered bill
+     *
+     * @param chooseNumber: string choose
+     * @return 1 if bach system, 0 if exit program and -1 if invalid
+     */
+    public int validateChooseOptionWhenOrdered(String chooseNumber) {
+        try {
+            int number = Integer.parseInt(chooseNumber);
+            int continueOrder = 1;
+            int finishOrder = 2;
+            int exitProgram = 0;
+            if (number == continueOrder) {
+                return 1;
+            } else if (number == finishOrder) {
+                this.menuService.exportBill();
+                return 2;
+            } else if (number == exitProgram) {
+                System.out.println("--> ALERT: Program will exit. See you again");
+                System.exit(0);
+                return 0;
+            } else {
+                System.out.println("--> WARNING: Can only enter 0 to 2. Please try again");
+                return -1;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("--> WARNING: Can only enter integer. Please try again");
+            return -1;
+        }
+    }
+
+    /**
+     * Validate string choose when print bill
+     *
+     * @param choose: string choose
+     * @return 1 if bach system, 0 if exit program and -1 if invalid
+     */
+    public int validateChooseWhenPrintBill(String choose) {
+        try {
+            int number = Integer.parseInt(choose);
+            int backSystem = 1;
+            int exitProgram = 0;
+            if (number == backSystem) {
+                return 1;
+            } else if (number == exitProgram) {
+                System.out.println("--> ALERT: Program will exit. See you again");
+                System.exit(0);
+                return 0;
+            } else {
+                System.out.println("--> WARNING: Can only enter 0 or 1. Please try again");
+                return -1;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("--> WARNING: Can only enter integer. Please try again");
+            return -1;
+        }
+    }
+
+    /**
      * Get name of type menu
+     *
      * @param typeNumber: number of type menu
      * @return name of type menu
      */

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Everclear",
+    "description": "Alcohol from the USA",
+    "price": 50000.0,
+    "type": "ALCOHOL"
+  },
+  {
+    "name": "Golden 190",
+    "description": "Alcohol from the USA",
+    "price": 75000.0,
+    "type": "ALCOHOL"
+  }
+]

@@ -1,5 +1,7 @@
 package models;
 
+import com.google.gson.annotations.JsonAdapter;
+
 public class MenuModel {
     private String name;
     private String description;

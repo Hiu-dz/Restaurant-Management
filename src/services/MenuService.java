@@ -1,5 +1,6 @@
 package services;
 
+import models.BillModel;
 import models.MenuModel;
 import models.TypeMenu;
 import repositories.MenuRepository;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MenuService {
     private final MenuRepository menuRepository;
@@ -30,15 +32,6 @@ public class MenuService {
     }
 
     /**
-     * Get current date for ordered time
-     *
-     * @return current date
-     */
-    public LocalDate getOrderedTime() {
-        return LocalDate.now();
-    }
-
-    /**
      * Handle add menu item at bill list
      *
      * @param typeMenu:   drink menu or food menu
@@ -46,7 +39,7 @@ public class MenuService {
      * @param quantity:   quantity of item
      */
     public void orderMenuItem(String typeMenu, int itemNumber, int quantity) {
-        List<MenuModel> menus = this.menuRepository.getAllMenus();
+        List<MenuModel> menus = this.menuRepository.getAllMenuItems();
         List<MenuModel> drinkMenus = menus
                 .stream()
                 .filter(m -> m.getType() == TypeMenu.SOFT_DRINK || m.getType() == TypeMenu.ALCOHOL)
@@ -79,20 +72,15 @@ public class MenuService {
         }
 
         MenuModel menuItem = new MenuModel(itemName, itemDescription, itemPrice, type);
-        this.billService.addMenuItem(menuItem, quantity, this.getOrderedTime());
+        this.billService.addMenuItem(menuItem, quantity);
     }
 
     /**
      * Create bill and display bill on console
      */
     public void exportBill() {
-        String dateBill = this.getOrderedTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        this.billService.createBill(dateBill);
-        List<String> bills = this.billService.getAllBill(dateBill);
-        String bill = bills.get(bills.size() - 1);
-        for (String b : this.billService.getOneBill(dateBill, bill)) {
-            System.out.println(b);
-        }
+        this.billService.createBill();
+        this.billService.printBillWhenOrderDone();
     }
 
     /**

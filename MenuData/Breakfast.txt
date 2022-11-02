@@ -1,5 +1,0 @@
-Banh mi, Breakfast from Vietnam, 15000, BREAKFAST
-Banh cuon, Breakfast from Vietnam, 12000, BREAKFAST
-Pho bo, Breakfast from Vietnam, 20000, BREAKFAST
-Banh canh, Breakfast from Vietnam, 22000, BREAKFAST
-Bun gio, Breakfast from Vietnam, 25000, BREAKFAST

@@ -6,25 +6,28 @@ import java.util.Scanner;
 
 public class MainView {
     private final MainController mainController;
-    private final MenuView menuView;
-    private final BillView billView;
 
     public MainView() {
         this.mainController = new MainController();
-        this.menuView = new MenuView();
-        this.billView = new BillView();
     }
 
+    /**
+     * Show system of restaurant management
+     */
     public void showSystem() {
         System.out.println("##### Welcome to Hiu 2nd Restaurant #####");
         System.out.println("1. Order menu item");
         System.out.println("2. System management");
         System.out.println("------");
         System.out.println("0. Exit program");
-        this.chooseSystem();
+        this.chooseFunction();
     }
 
-    private void chooseSystem() {
+    /**
+     * Choose function of system restaurant management
+     */
+    private void chooseFunction() {
+        MenuView menuView = new MenuView();
         Scanner scChoose = new Scanner(System.in);
         System.out.println("------");
         System.out.print("Enter your choose: ");
@@ -34,14 +37,17 @@ public class MainView {
         int systemManagement = 2;
         int warning = -1;
         if (number == orderMenuItem) {
-            this.menuView.showMenu();
+            menuView.showMenu();
         } else if (number == systemManagement) {
             this.showSystemManagement();
         } else if (number == warning) {
-            this.chooseSystem();
+            this.chooseFunction();
         }
     }
 
+    /**
+     * Show system management
+     */
     public void showSystemManagement() {
         System.out.println("------ SYSTEM MANAGEMENT ------");
         System.out.println("1. Menu management");
@@ -52,7 +58,12 @@ public class MainView {
         this.chooseSystemManagement();
     }
 
+    /**
+     * Choose system management
+     */
     private void chooseSystemManagement() {
+        MenuView menuView = new MenuView();
+        BillView billView = new BillView();
         Scanner scChoose = new Scanner(System.in);
         System.out.println("------");
         System.out.print("Enter your choose: ");
@@ -62,9 +73,9 @@ public class MainView {
         int billManagement = 2;
         int backSystem = 3;
         if (number == menuManagement) {
-            this.menuView.showManagement();
+            menuView.showManagement();
         } else if (number == billManagement) {
-            this.billView.showBillManagement();
+            billView.showBillManagement();
         } else if (number == backSystem) {
             this.showSystem();
         }

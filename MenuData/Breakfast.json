@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Banh mi",
+    "description": "Breakfast from Vietnam",
+    "price": 65000.0,
+    "type": "BREAKFAST"
+  },
+  {
+    "name": "Banh cuon",
+    "description": "Breakfast from Vietnam",
+    "price": 25000.0,
+    "type": "BREAKFAST"
+  },
+  {
+    "name": "Pho bo",
+    "description": "Breakfast from Vietnam",
+    "price": 35000.0,
+    "type": "BREAKFAST"
+  },
+  {
+    "name": "Banh canh",
+    "description": "Breakfast from Vietnam",
+    "price": 25000.0,
+    "type": "BREAKFAST"
+  },
+  {
+    "name": "Bun gio",
+    "description": "Breakfast from Italy",
+    "price": 30000.0,
+    "type": "BREAKFAST"
+  }
+]

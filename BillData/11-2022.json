@@ -1,0 +1,21 @@
+[
+  {
+    "menuItems": [
+      {
+        "name": "Red Bull",
+        "description": "Sort drink from another country",
+        "price": "18000.0",
+        "type": "SOFT_DRINK",
+        "quantity": "3"
+      },
+      {
+        "name": "Mi y",
+        "description": "Lunch from Italia",
+        "price": "30000.0",
+        "type": "LUNCH",
+        "quantity": "2"
+      }
+    ],
+    "orderedTime": "02-11-2022"
+  }
+]
